@@ -1,9 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Latest Tips & Tactics</title>
   <link rel="stylesheet" href="style.css">
-  <script defer>
+</head>
+<body>
+  <div id="scrolling-panel">
+    <h3>📢 Latest Tips & Tactics</h3>
+    <div id="scroll-container"></div>
+  </div>
+
+  <script>
     window.onload = function() {
       const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
       let tips = [];
@@ -79,4 +88,5 @@
       fetchTips();
     };
   </script>
-</head>
+</body>
+</html>
