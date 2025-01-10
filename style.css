@@ -2,8 +2,9 @@ body {
   margin: 0;
   padding: 20px;
   font-family: 'Noto Sans', sans-serif;
-  background-color: #f4f4f4;
-  color: #000;
+  background-color: #36393f;
+  color: #dcddde;
+  box-sizing: border-box;
 }
 
 #scrolling-panel {
@@ -16,11 +17,11 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   margin: 20px auto;
   position: relative;
+  box-sizing: border-box;
 }
 
 #scroll-container {
   height: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -28,6 +29,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
 }
 
 .scroll-message {
@@ -36,17 +38,28 @@ body {
   gap: 10px;
   padding: 10px;
   border-radius: 5px;
-  background-color: #36393f;
-  animation: slide-in 1s ease forwards;
+  background-color: #40444b;
+  color: #dcddde;
+  animation: slide-in-out 4s ease-in-out;
+  height: 60px;
+  box-sizing: border-box;
 }
 
-@keyframes slide-in {
-  from {
-    transform: translateY(-100%);
+@keyframes slide-in-out {
+  0% {
+    transform: translateY(100%);
     opacity: 0;
   }
-  to {
+  10% {
     transform: translateY(0);
     opacity: 1;
+  }
+  90% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
