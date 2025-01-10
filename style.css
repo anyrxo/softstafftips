@@ -2,18 +2,18 @@ body {
   margin: 0;
   padding: 20px;
   font-family: 'Noto Sans', sans-serif;
-  background-color: #36393f;
+  background-color: #2f3136;
   color: #dcddde;
   box-sizing: border-box;
 }
 
 #scrolling-panel {
   width: 350px;
-  height: 600px;
+  height: 600px; /* Set fixed height for the panel */
   background-color: #2f3136;
   border-radius: 10px;
   padding: 10px;
-  overflow: hidden;
+  overflow: hidden; /* Hide scrollbars */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   margin: 20px auto;
   position: relative;
@@ -21,15 +21,11 @@ body {
 }
 
 #scroll-container {
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
+  bottom: 0;
 }
 
 .scroll-message {
@@ -40,11 +36,13 @@ body {
   border-radius: 5px;
   background-color: #40444b;
   color: #dcddde;
-  animation: slide-in-out 4s ease-in-out;
-  height: 60px;
+  height: 100px; /* Fixed height for each message */
   box-sizing: border-box;
+  opacity: 0;
+  animation: slide-in-out 4s ease-in-out forwards;
 }
 
+/* Keyframe animation for sliding up */
 @keyframes slide-in-out {
   0% {
     transform: translateY(100%);
