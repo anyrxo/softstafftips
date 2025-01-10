@@ -1,79 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Latest Tips & Tactics</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="scrolling-panel">
-    <h3>📢 Latest Tips & Tactics</h3>
-    <!-- This element is critical! -->
-    <div id="scroll-container"></div>
-  </div>
+<script>
+  window.onload = function() {
+    const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
+    let tips = []; // To store fetched tips
+    let currentIndex = 0; // Track the current tip being shown
 
-  <script>
-    window.onload = function() {
-      console.log("DOM fully loaded and script running...");
-      const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
-
-      async function fetchTips() {
-        try {
-          console.log('Fetching tips from GitHub Gist...');
-          const response = await fetch(apiUrl);
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const text = await response.text();
-          const tips = JSON.parse(text);
-          console.log('Fetched tips:', tips);
-
-          if (!Array.isArray(tips) || tips.length === 0) {
-            console.error('No valid tips found.');
-            return;
-          }
-
-          startScrolling(tips);
-        } catch (error) {
-          console.error('Failed to load tips:', error);
-        }
+    // Utility function to shuffle the tips array
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
+    }
 
-      function startScrolling(tips) {
-        const container = document.getElementById('scroll-container');
+    async function fetchTips() {
+      try {
+        console.log('Fetching tips from GitHub Gist...');
+        const response = await fetch(apiUrl);
 
-        if (!container) {
-          console.error('Container element not found');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const text = await response.text();
+        tips = JSON.parse(text);
+        console.log('Fetched tips:', tips);
+
+        if (!Array.isArray(tips) || tips.length === 0) {
+          console.error('No valid tips found.');
           return;
         }
 
-        function addRandomMessage() {
-          const randomTip = tips[Math.floor(Math.random() * tips.length)];
-          const messageDiv = document.createElement('div');
-          messageDiv.className = 'scroll-message';
-          messageDiv.innerHTML = `
-            <div>
-              <strong>${randomTip.title}</strong>: ${randomTip.description}
-            </div>
-          `;
-          container.appendChild(messageDiv);
+        // Shuffle the tips initially
+        shuffleArray(tips);
 
-          // Remove message after animation ends
-          setTimeout(() => {
-            container.removeChild(messageDiv);
-          }, 4000);
+        startScrolling();
+      } catch (error) {
+        console.error('Failed to load tips:', error);
+      }
+    }
+
+    function startScrolling() {
+      const container = document.getElementById('scroll-container');
+
+      function addNextMessage() {
+        // Clear old messages
+        container.innerHTML = '';
+
+        // Get the next tip in the shuffled array
+        const tip = tips[currentIndex];
+        currentIndex++;
+
+        // If we've reached the end of the tips array, shuffle and restart
+        if (currentIndex >= tips.length) {
+          shuffleArray(tips);
+          currentIndex = 0;
         }
 
-        setInterval(() => {
-          addRandomMessage();
-        }, 4000);
+        // Create a new message div
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'scroll-message';
+        messageDiv.innerHTML = `
+          <div>
+            <strong>${tip.title}</strong>: ${tip.description}
+          </div>
+        `;
+
+        // Add the message to the container
+        container.appendChild(messageDiv);
+
+        // Wait for 4 seconds (animation duration) before adding the next message
+        setTimeout(addNextMessage, 4000);
       }
 
-      fetchTips();
-    };
-  </script>
-</body>
-</html>
+      // Start the first message
+      addNextMessage();
+    }
+
+    fetchTips();
+  };
+</script>
