@@ -5,27 +5,38 @@ body {
   background-color: #2f3136;
   color: #dcddde;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 #scrolling-panel {
-  width: 450px;
-  height: 700px;
+  width: 100%;
+  max-width: 450px;
+  height: 100%;
+  max-height: 700px;
   background-color: #2f3136;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  margin: 20px auto;
   position: relative;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #scroll-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
   width: 100%;
   height: 100%;
+  padding: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .scroll-message {
@@ -34,9 +45,8 @@ body {
   background-color: #40444b;
   color: #dcddde;
   box-sizing: border-box;
-  width: 50%;
-  margin: 0 auto;
-  height: 120px;
+  width: 100%;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -53,6 +63,9 @@ body {
 .tip-content {
   font-size: 0.9em;
   color: #b9bbbe;
+  overflow-wrap: break-word; /* Ensure long words break correctly */
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 /* Fade-in animation for new messages */
