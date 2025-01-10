@@ -1,92 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Latest Tips & Tactics</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="scrolling-panel">
-    <h3>📢 Latest Tips & Tactics</h3>
-    <div id="scroll-container"></div>
-  </div>
+<script>
+  const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
+  let tips = [];
+  let currentIndex = 0;
 
-  <script>
-    window.onload = function() {
-      const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
-      let tips = [];
-      let currentIndex = 0;
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
 
-      function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
+  async function fetchTips() {
+    try {
+      console.log('Fetching tips from GitHub Gist...');
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      async function fetchTips() {
-        try {
-          console.log('Fetching tips from GitHub Gist...');
-          const response = await fetch(apiUrl);
+      const text = await response.text();
+      tips = JSON.parse(text);
+      console.log('Fetched tips:', tips);
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const text = await response.text();
-          tips = JSON.parse(text);
-          console.log('Fetched tips:', tips);
-
-          if (!Array.isArray(tips) || tips.length === 0) {
-            console.error('No valid tips found.');
-            return;
-          }
-
-          shuffleArray(tips); // Shuffle tips initially
-          startScrolling();
-        } catch (error) {
-          console.error('Failed to load tips:', error);
-        }
+      if (!Array.isArray(tips) || tips.length === 0) {
+        console.error('No valid tips found.');
+        return;
       }
 
-      function startScrolling() {
-        const container = document.getElementById('scroll-container');
+      shuffleArray(tips); // Shuffle tips initially
+      startScrolling();
+    } catch (error) {
+      console.error('Failed to load tips:', error);
+    }
+  }
 
-        if (!container) {
-          console.error('Container element not found');
-          return;
-        }
+  function startScrolling() {
+    const container = document.getElementById('scroll-container');
+    console.log('Container element:', container); // Debug log
 
-        function addNextMessage() {
-          container.innerHTML = ''; // Clear old message
+    if (!container) {
+      console.error('Container element not found');
+      return;
+    }
 
-          const tip = tips[currentIndex];
-          currentIndex++;
+    function addNextMessage() {
+      container.innerHTML = ''; // Clear old message
 
-          if (currentIndex >= tips.length) {
-            shuffleArray(tips);
-            currentIndex = 0;
-          }
+      const tip = tips[currentIndex];
+      currentIndex++;
 
-          const messageDiv = document.createElement('div');
-          messageDiv.className = 'scroll-message';
-          messageDiv.innerHTML = `
-            <div>
-              <strong>${tip.title}</strong>: ${tip.description}
-            </div>
-          `;
-
-          container.appendChild(messageDiv);
-
-          setTimeout(addNextMessage, 4000); // Wait 4 seconds before next message
-        }
-
-        addNextMessage(); // Start the first message
+      if (currentIndex >= tips.length) {
+        shuffleArray(tips);
+        currentIndex = 0;
       }
 
-      fetchTips();
-    };
-  </script>
-</body>
-</html>
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'scroll-message';
+      messageDiv.innerHTML = `
+        <div>
+          <strong>${tip.title}</strong>: ${tip.description}
+        </div>
+      `;
+
+      container.appendChild(messageDiv);
+
+      setTimeout(addNextMessage, 4000); // Wait 4 seconds before next message
+    }
+
+    addNextMessage(); // Start the first message
+  }
+
+  // Use MutationObserver to wait for #scroll-container to appear in the DOM
+  const observer = new MutationObserver((mutations, observerInstance) => {
+    const container = document.getElementById('scroll-container');
+    if (container) {
+      console.log('Container element found by MutationObserver');
+      observerInstance.disconnect(); // Stop observing once the element is found
+      fetchTips(); // Start fetching tips and scrolling
+    }
+  });
+
+  // Start observing the document body for added nodes
+  observer.observe(document.body, { childList: true, subtree: true });
+</script>
