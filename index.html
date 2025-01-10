@@ -15,6 +15,7 @@
     const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
     let tips = [];
     let currentIndex = 0;
+    const messageInterval = 4000; // 4 seconds between each message change
 
     async function fetchTips() {
       try {
@@ -43,22 +44,23 @@
     function startScrolling() {
       const container = document.getElementById('scroll-container');
 
-      // Initially fill the container with as many messages as fit
-      const visibleMessagesCount = Math.floor(container.offsetHeight / 100); // Assuming each message is 100px tall
-      for (let i = 0; i < visibleMessagesCount; i++) {
-        addNextMessage(container);
-      }
+      // Initially fill the container with one message
+      addNextMessage(container);
 
-      // Start scrolling messages one by one
+      // Start interval for adding new messages
       setInterval(() => {
-        container.firstChild.remove(); // Remove the first (top) message
-        addNextMessage(container); // Add a new message at the bottom
-      }, 4000); // Change message every 4 seconds
+        container.firstChild.classList.add('fade-out'); // Add fade-out class to the top message
+
+        setTimeout(() => {
+          container.firstChild.remove(); // Remove the top message after fade-out
+          addNextMessage(container); // Add a new message at the bottom
+        }, 1000); // Match the fade-out animation duration
+      }, messageInterval);
     }
 
     function addNextMessage(container) {
       const tip = tips[currentIndex];
-      currentIndex = (currentIndex + 1) % tips.length; // Loop back to the start if we reach the end
+      currentIndex = (currentIndex + 1) % tips.length; // Loop back to start if we reach the end
 
       const messageDiv = document.createElement('div');
       messageDiv.className = 'scroll-message';
