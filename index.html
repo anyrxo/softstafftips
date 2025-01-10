@@ -14,6 +14,7 @@
   <script>
     const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
     let tips = [];
+    let currentIndex = 0;
 
     async function fetchTips() {
       try {
@@ -42,17 +43,28 @@
     function startScrolling() {
       const container = document.getElementById('scroll-container');
 
-      tips.forEach((tip) => {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'scroll-message';
-        messageDiv.innerHTML = `<strong>${tip.title}</strong>: ${tip.description}`;
-        container.appendChild(messageDiv);
-      });
+      // Initially fill the container with as many messages as fit
+      const visibleMessagesCount = Math.floor(container.offsetHeight / 100); // Assuming each message is 100px tall
+      for (let i = 0; i < visibleMessagesCount; i++) {
+        addNextMessage(container);
+      }
 
-      // Clone the tips to create an infinite loop
-      const clone = container.cloneNode(true);
-      clone.id = 'scroll-container-clone';
-      document.getElementById('scrolling-panel').appendChild(clone);
+      // Start scrolling messages one by one
+      setInterval(() => {
+        container.firstChild.remove(); // Remove the first (top) message
+        addNextMessage(container); // Add a new message at the bottom
+      }, 4000); // Change message every 4 seconds
+    }
+
+    function addNextMessage(container) {
+      const tip = tips[currentIndex];
+      currentIndex = (currentIndex + 1) % tips.length; // Loop back to the start if we reach the end
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'scroll-message';
+      messageDiv.innerHTML = `<strong>${tip.title}</strong>: ${tip.description}`;
+
+      container.appendChild(messageDiv);
     }
 
     document.addEventListener('DOMContentLoaded', fetchTips);
