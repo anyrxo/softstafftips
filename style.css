@@ -40,7 +40,7 @@ body {
 }
 
 .scroll-message {
-  padding: 15px;
+  padding: 12px;
   border-radius: 5px;
   background-color: #40444b;
   color: #dcddde;
@@ -56,12 +56,12 @@ body {
 
 .tip-title {
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1em;
   color: #ffffff;
 }
 
 .tip-content {
-  font-size: 0.9em;
+  font-size: 0.8em;
   color: #b9bbbe;
   overflow-wrap: break-word; /* Ensure long words break correctly */
   word-wrap: break-word;
