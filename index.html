@@ -1,10 +1,9 @@
 <script>
   window.onload = function() {
     const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
-    let tips = []; // To store fetched tips
-    let currentIndex = 0; // Track the current tip being shown
+    let tips = [];
+    let currentIndex = 0;
 
-    // Utility function to shuffle the tips array
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -30,9 +29,7 @@
           return;
         }
 
-        // Shuffle the tips initially
-        shuffleArray(tips);
-
+        shuffleArray(tips); // Shuffle tips initially
         startScrolling();
       } catch (error) {
         console.error('Failed to load tips:', error);
@@ -42,21 +39,22 @@
     function startScrolling() {
       const container = document.getElementById('scroll-container');
 
-      function addNextMessage() {
-        // Clear old messages
-        container.innerHTML = '';
+      if (!container) {
+        console.error('Container element not found');
+        return;
+      }
 
-        // Get the next tip in the shuffled array
+      function addNextMessage() {
+        container.innerHTML = ''; // Clear old message
+
         const tip = tips[currentIndex];
         currentIndex++;
 
-        // If we've reached the end of the tips array, shuffle and restart
         if (currentIndex >= tips.length) {
           shuffleArray(tips);
           currentIndex = 0;
         }
 
-        // Create a new message div
         const messageDiv = document.createElement('div');
         messageDiv.className = 'scroll-message';
         messageDiv.innerHTML = `
@@ -65,15 +63,12 @@
           </div>
         `;
 
-        // Add the message to the container
         container.appendChild(messageDiv);
 
-        // Wait for 4 seconds (animation duration) before adding the next message
-        setTimeout(addNextMessage, 4000);
+        setTimeout(addNextMessage, 4000); // Wait 4 seconds before next message
       }
 
-      // Start the first message
-      addNextMessage();
+      addNextMessage(); // Start the first message
     }
 
     fetchTips();
