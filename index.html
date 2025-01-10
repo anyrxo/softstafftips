@@ -14,14 +14,6 @@
   <script>
     const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
     let tips = [];
-    let currentIndex = 0;
-
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
 
     async function fetchTips() {
       try {
@@ -41,7 +33,6 @@
           return;
         }
 
-        shuffleArray(tips);
         startScrolling();
       } catch (error) {
         console.error('Failed to load tips:', error);
@@ -50,48 +41,21 @@
 
     function startScrolling() {
       const container = document.getElementById('scroll-container');
-      console.log('Container element:', container);
 
-      if (!container) {
-        console.error('Container element not found');
-        return;
-      }
-
-      function addNextMessage() {
-        container.innerHTML = '';
-
-        const tip = tips[currentIndex];
-        currentIndex++;
-
-        if (currentIndex >= tips.length) {
-          shuffleArray(tips);
-          currentIndex = 0;
-        }
-
+      tips.forEach((tip) => {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'scroll-message';
-        messageDiv.innerHTML = `<div><strong>${tip.title}</strong>: ${tip.description}</div>`;
-
+        messageDiv.innerHTML = `<strong>${tip.title}</strong>: ${tip.description}`;
         container.appendChild(messageDiv);
+      });
 
-        setTimeout(addNextMessage, 4000);
-      }
-
-      addNextMessage();
+      // Clone the tips to create an infinite loop
+      const clone = container.cloneNode(true);
+      clone.id = 'scroll-container-clone';
+      document.getElementById('scrolling-panel').appendChild(clone);
     }
 
-    function waitForContainer() {
-      const container = document.getElementById('scroll-container');
-      if (container) {
-        console.log('Container element found');
-        fetchTips();
-      } else {
-        console.log('Waiting for container element...');
-        setTimeout(waitForContainer, 100);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', waitForContainer);
+    document.addEventListener('DOMContentLoaded', fetchTips);
   </script>
 </body>
 </html>
