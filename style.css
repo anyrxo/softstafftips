@@ -8,8 +8,8 @@ body {
 }
 
 #scrolling-panel {
-  width: 400px;
-  height: 600px;
+  width: 450px;
+  height: 700px;
   background-color: #2f3136;
   border-radius: 10px;
   overflow: hidden;
@@ -29,18 +29,30 @@ body {
 }
 
 .scroll-message {
-  padding: 10px;
+  padding: 15px;
   border-radius: 5px;
   background-color: #40444b;
   color: #dcddde;
   box-sizing: border-box;
   width: 95%;
   margin: 0 auto;
-  height: 100px;
+  height: 120px;
   display: flex;
-  align-items: center;
-  opacity: 1;
+  flex-direction: column;
+  justify-content: space-between;
   animation: fade-in 1s ease;
+  border-bottom: 3px solid #04ba9c;
+}
+
+.tip-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.tip-content {
+  font-size: 0.9em;
+  color: #b9bbbe;
 }
 
 /* Fade-in animation for new messages */
