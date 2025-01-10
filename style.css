@@ -56,12 +56,12 @@ body {
 
 .tip-title {
   font-weight: bold;
-  font-size: 1em;
+  font-size: 0.85em;
   color: #ffffff;
 }
 
 .tip-content {
-  font-size: 0.8em;
+  font-size: 0.65em;
   color: #b9bbbe;
   overflow-wrap: break-word; /* Ensure long words break correctly */
   word-wrap: break-word;
