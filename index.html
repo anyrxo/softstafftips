@@ -1,4 +1,4 @@
-<script>
+window.onload = function() {
   const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
 
   async function fetchTips() {
@@ -11,7 +11,7 @@
       }
 
       const text = await response.text();
-      const tips = JSON.parse(text); // Parse plain text into JSON
+      const tips = JSON.parse(text);
       console.log('Fetched tips:', tips);
 
       if (!Array.isArray(tips) || tips.length === 0) {
@@ -39,17 +39,16 @@
       `;
       container.appendChild(messageDiv);
 
-      // Remove message after animation ends (4 seconds in this case)
+      // Remove message after animation ends
       setTimeout(() => {
         container.removeChild(messageDiv);
       }, 4000);
     }
 
-    // Add a message every 4 seconds (to match animation duration)
     setInterval(() => {
       addRandomMessage();
     }, 4000);
   }
 
-  window.onload = fetchTips;
-</script>
+  fetchTips();
+};
