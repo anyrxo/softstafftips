@@ -1,61 +1,77 @@
-<script>
-  window.onload = function() {
-    const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest Tips & Tactics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="scrolling-panel">
+    <h3>📢 Latest Tips & Tactics</h3>
+    <div id="scroll-container"></div> <!-- This element is critical -->
+  </div>
 
-    async function fetchTips() {
-      try {
-        console.log('Fetching tips from GitHub Gist...');
-        const response = await fetch(apiUrl);
+  <script>
+    window.onload = function() {
+      const apiUrl = 'https://gist.githubusercontent.com/xsirenmedia/ba691cca7192cf40ceddad1b2ededfea/raw/9e37397b3727df47992772f70113681b773545ac/gistfile1.txt';
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+      async function fetchTips() {
+        try {
+          console.log('Fetching tips from GitHub Gist...');
+          const response = await fetch(apiUrl);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const text = await response.text();
+          const tips = JSON.parse(text);
+          console.log('Fetched tips:', tips);
+
+          if (!Array.isArray(tips) || tips.length === 0) {
+            console.error('No valid tips found.');
+            return;
+          }
+
+          startScrolling(tips);
+        } catch (error) {
+          console.error('Failed to load tips:', error);
         }
+      }
 
-        const text = await response.text();
-        const tips = JSON.parse(text);
-        console.log('Fetched tips:', tips);
+      function startScrolling(tips) {
+        const container = document.getElementById('scroll-container');
 
-        if (!Array.isArray(tips) || tips.length === 0) {
-          console.error('No valid tips found.');
+        if (!container) {
+          console.error('Container element not found');
           return;
         }
 
-        startScrolling(tips);
-      } catch (error) {
-        console.error('Failed to load tips:', error);
-      }
-    }
+        function addRandomMessage() {
+          const randomTip = tips[Math.floor(Math.random() * tips.length)];
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'scroll-message';
+          messageDiv.innerHTML = `
+            <div>
+              <strong>${randomTip.title}</strong>: ${randomTip.description}
+            </div>
+          `;
+          container.appendChild(messageDiv);
 
-    function startScrolling(tips) {
-      const container = document.getElementById('scroll-container');
+          // Remove message after animation ends
+          setTimeout(() => {
+            container.removeChild(messageDiv);
+          }, 4000);
+        }
 
-      if (!container) {
-        console.error('Container element not found');
-        return;
-      }
-
-      function addRandomMessage() {
-        const randomTip = tips[Math.floor(Math.random() * tips.length)];
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'scroll-message';
-        messageDiv.innerHTML = `
-          <div>
-            <strong>${randomTip.title}</strong>: ${randomTip.description}
-          </div>
-        `;
-        container.appendChild(messageDiv);
-
-        // Remove message after animation ends
-        setTimeout(() => {
-          container.removeChild(messageDiv);
+        setInterval(() => {
+          addRandomMessage();
         }, 4000);
       }
 
-      setInterval(() => {
-        addRandomMessage();
-      }, 4000);
-    }
-
-    fetchTips();
-  };
-</script>
+      fetchTips();
+    };
+  </script>
+</body>
+</html>
