@@ -36,7 +36,37 @@ body {
   box-sizing: border-box;
   width: 95%;
   margin: 0 auto;
-  height: 100px; /* Fixed height for consistent scrolling */
+  height: 100px;
   display: flex;
   align-items: center;
+  opacity: 1;
+  animation: fade-in 1s ease;
+}
+
+/* Fade-in animation for new messages */
+@keyframes fade-in {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Fade-out animation for old messages */
+.fade-out {
+  animation: fade-out 1s ease forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
