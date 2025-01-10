@@ -45,6 +45,11 @@
       }
 
       function addNextMessage() {
+        if (!container) {
+          console.error('Container element not found');
+          return;
+        }
+
         container.innerHTML = ''; // Clear old message
 
         const tip = tips[currentIndex];
